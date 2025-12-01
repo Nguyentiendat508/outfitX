@@ -27,7 +27,7 @@ export default function ModalDelete({ openDeleted, handleCloseDeleted, handleDel
         <DialogTitle>{"Delete"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            Bạn có chắc chắn muốn xóa hay không 77?
+            Bạn có chắc chắn muốn xóa hay không ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

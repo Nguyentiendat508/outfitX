@@ -14,7 +14,7 @@ import ModalDelete from "../../../../components/admin/ModalDeleted";
 import { deleteDocument } from "../../../../services/firebaseService";
 import PaginationTable from "../../../../components/admin/PaginationTable";
 import { ProductsContext } from "../../../../contexts/ProductProvider";
-import { getOjectById } from "../../../../services/reponsive";
+import { convertString, getOjectById } from "../../../../services/reponsive";
 import { CategoryTypesContext } from "../../../../contexts/CategoryTypeProvider";
 import { BrandsContext } from "../../../../contexts/BrandsProvider";
 
@@ -46,7 +46,8 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
   const products = useContext(ProductsContext);
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
-
+  console.log(products);
+  
   const handleChange = (e, value) => setPage(value);
   const handleCloseDeleted = () => setOpenDeleted(false);
 
@@ -60,7 +61,7 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
     const filtered = q
       ? products.filter((e) => (e.name || "").toLowerCase().includes(q))
       : products;
-    return filtered.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+    return filtered;
   }, [products, search, page]);
 
   const handleDeleted = async () => {
@@ -72,6 +73,7 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
     handleClickOpen();
     setProduct(row);
   };
+console.log(visibleRows);
 
   return (
     <>
@@ -112,7 +114,7 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
                 </StyledTableCell>
               </StyledTableRow>
             ) : (
-              visibleRows.map((row, index) => (
+              visibleRows.slice((page - 1) * rowsPerPage, page * rowsPerPage).map((row, index) => (
                 <StyledTableRow key={row.id}>
                   <StyledTableCell>
                     {index + 1 + rowsPerPage * (page - 1)}
@@ -149,7 +151,7 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
                     </div>
                   </StyledTableCell>
                   <StyledTableCell align="left">
-                    {row.description}
+                    {convertString(row.description)}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     <div className="flex gap-1 justify-center">

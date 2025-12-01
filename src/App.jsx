@@ -1,23 +1,17 @@
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
-import Header from './components/client/Header'
-import Footer from './components/client/Footer'
-import Home from './pages/client/home/Home'
-import AdminRouters from './routers/AdminRouters'
-import ClientRouters from './routers/ClientRouters'
+import { AuthContext } from './contexts/AuthProvider'
+import { useContext } from 'react'
+import Home from './pages/client/home/Home';
+import Main from './pages/client/main/Main';
+import HomeAdmin from './pages/admin/home_admin/HomeAdmin';
 
 function App() {
+  const { accountLogin } = useContext(AuthContext);
   return (
     <>
-      <Routes>
-        <Route path="/" element={<>
-          <Header />
-          <Home />
-          <Footer />
-        </>} />
-        <Route path="/admin" element={<AdminRouters />} />
-        <Route path="/*" element={<ClientRouters />} />
-      </Routes>
+      {
+        accountLogin?.role == "admin" ? <HomeAdmin/> : <Home/>
+      }
     </>
   )
 }

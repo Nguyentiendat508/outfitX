@@ -23,23 +23,23 @@ function NavBarAdmin() {
       <div className="flex gap-2 items-center justify-center cursor-pointer">
         <TfiMenuAlt onClick={() => setIsShow(!isShow)} />
         {isShow && (
-          <h1 className="font-bold text-xl">
-            OutFitX<span className="text-yellow-400">Admin</span>
+          <h1 className="font-bold text-xl bg-gradient-to-r from-[#121FCF] to-[#CF1512] bg-clip-text text-transparent">
+            TD SHOP <span className="bg-gradient-to-l from-[#00FF00] to-[#00FFFF] bg-clip-text text-transparent ">Admin</span>
           </h1>
         )}
       </div>
       <div className={isShow ? "" : "max-md:hidden" }>
-        <div className="flex p-2 items-center gap-2 bg-amber-50 rounded-xl text-black mt-3">
+        <div className="flex p-2 items-center gap-2 bg-gradient-to-l from-[#00FF00] to-[#00FFFF] bg-amber-50 rounded-xl text-black mt-3">
           <MdDashboard />
           {isShow && <h3>Dashboard</h3>}
         </div>
         {isShow && <h3 className="mt-2">Form and Data</h3>}
         {LISTMENU.map((e, index) => (
           <div
-            className="mt-3 relative group cursor-pointer"
+            className="mt-3 relative group cursor-pointer "
             onClick={() => handleShow(index)}
           >
-            <div className="flex p-2 items-center gap-2 bg-amber-50 rounded-xl text-black">
+            <div className="flex p-2 items-center gap-2 bg-gradient-to-l from-[#00FF00] to-[#00FFFF]  bg-amber-50 rounded-xl text-black">
               {e.icon}
               {isShow && <h3>{e.title}</h3>}
               {index == show ? (
@@ -56,7 +56,7 @@ function NavBarAdmin() {
               }  ${index == show ? "" : "hidden"}`}
             >
               {e.items.map((a) => (
-                <Link to={a.path} className="flex p-2 items-center hover:bg-amber-400 hover:text-white gap-2 mt-2 bg-amber-50 rounded-xl text-black ml-6">
+                <Link to={a.path} className="flex p-2 items-center bg-[linear-gradient(to_left,#FF0000_0%,#3911FF_50%,#FFD21F_100%)] hover:bg-amber-400 hover:text-white gap-2 mt-2 bg-amber-50 rounded-xl text-black ml-6">
                   <h3>{a.name}</h3>
                 </Link>
               ))}

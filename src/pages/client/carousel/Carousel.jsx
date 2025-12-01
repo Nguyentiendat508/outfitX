@@ -7,6 +7,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+const listImg = [
+  "https://cdn.hstatic.net/files/1000253775/file/ngang_-_2048x813.jpg",
+  "https://cdn.hstatic.net/files/1000253775/file/banner_web_pc_kv_pc_kv.jpg",
+  "https://cdn.hstatic.net/files/1000253775/file/banner_wed_nang.jpg",
+];
 const Carousel = () => {
   return (
     <div className="w-full">
@@ -19,27 +24,16 @@ const Carousel = () => {
         autoplay={{ delay: 3000 }}
         className="w-full"
       >
-        <SwiperSlide>
-          <img
-            src="https://cdn.hstatic.net/files/1000253775/file/khung_flash_sale_pc_5f9dd4feb858435b9f43d4908088bfb1.jpg"
-            alt="Slide 1"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-xl"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://cdn.hstatic.net/files/1000253775/file/banner-do-dong-pc.jpg"
-            alt="Slide 2"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-xl"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img
-            src="https://cdn.hstatic.net/files/1000253775/file/banner_wed_nang.jpg"
-            alt="Slide 3"
-            className="w-full h-[200px] sm:h-[300px] md:h-[400px] object-cover rounded-xl"
-          />
-        </SwiperSlide>
+        {/* vòng lặp  */}
+        {listImg.map((img, index) => (
+          <SwiperSlide>
+            <img
+              src={img}
+              alt={index}
+              className="w-full h-[300px] rounded-xl"
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );

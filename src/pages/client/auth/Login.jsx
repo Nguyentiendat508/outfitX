@@ -3,8 +3,9 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { FaEnvelope, FaGoogle, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Register from "./Register";
+import { AccountContext } from "../../../contexts/AccountProvider";
+import { AuthContext } from "../../../contexts/AuthProvider";
+import ButtonGoogle from "./ButtonGoogle";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -16,16 +17,35 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     backdropFilter: "blur(10px)",
   },
 }));
+const inner = {name : "" , password : ""};
 
-export default function Login({ open, handleClose }) {
-  const [openRegister, setOpenRegister] = React.useState(false);
-
-  const handleOpenRegister = () => {
-    setOpenRegister(true);
+export default function Login({ open, handleClose, handleOpenRegister }) {
+ const [login, setLogin] = React.useState(inner);
+ const [error, setError] = React.useState (inner);
+  const accounts = React.useContext(AccountContext);
+  const { saveLogin } = React.useContext(AuthContext);
+  const handleChangeInput = (e) => {
+    setLogin({ ...login, [e.target.name]: e.target.value });
   };
-  const handleCloseRegister = () => {
-    setOpenRegister(false);
-  };
+  const handleLogin = () => {
+    if(validation()){ 
+      return;
+    }
+     const accountLogin = accounts.find(e => e.email == login.name || e.name == login.name && e.password == login.password);
+     if(accountLogin){
+       saveLogin(accountLogin);
+       handleClose()
+     }else {
+      console.log("Sai email hoặc mật khẩu");
+     }
+  }
+  const validation = () => {
+    const newError = {};
+    newError.name = login.name ? " " : "Vui lòng nhập name"
+    newError.name = login.password ? "" : "Vui long nhập password"
+    setError(newError);
+    return Object.values(newError).some(e => e !== ""); // nếu có lỗi thì true
+  }
 
   return (
     <BootstrapDialog
@@ -43,7 +63,11 @@ export default function Login({ open, handleClose }) {
             type="text"
             placeholder="e.g. example@mail.com or your username"
             className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+            name="name"
+            onChange={handleChangeInput}
+            value={login.name}
           />
+          <p className="text-red-500">{error.name}</p>
         </div>
 
         <label className="text-sm font-medium">Password</label>
@@ -53,14 +77,18 @@ export default function Login({ open, handleClose }) {
             type="password"
             placeholder="e.g. Example2006"
             className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 outline-none focus:ring-2 focus:ring-blue-400"
+            name="password"
+            onChange={handleChangeInput}
+            value={login.password}
           />
+            <p className="text-red-500">{error.name}</p>
         </div>
 
         <div className="flex gap-2 items-center justify-center text-sm mb-4">
           <a href="#" className="text-neutral-500 hover:underline">
             Forgot password?
           </a>
-          <button className="bg-black text-white px-4 py-1.5 rounded-full hover:bg-gray-800 transition">
+          <button onClick={handleLogin} className="bg-black text-white px-4 py-1.5 rounded-full hover:bg-gray-800 transition">
             Login
           </button>
         </div>
@@ -80,11 +108,7 @@ export default function Login({ open, handleClose }) {
           <span className="text-gray-500 mx-2 text-sm">Or</span>
           <div className="h-px w-1/4 bg-gray-300" />
         </div>
-
-        <button className="w-full bg-gradient-to-r from-[#121FCF] to-[#CF1512] text-white font-medium py-2 rounded-full flex items-center justify-center gap-2 hover:opacity-90 transition">
-          <FaGoogle /> Continue with Google
-        </button>
-
+       <ButtonGoogle handleClose={handleClose} />
         <p className="text-xs text-gray-500 text-center mt-4">
           By signing up, you agree to our{" "}
           <a href="#" className="text-blue-600 hover:underline">
@@ -103,8 +127,6 @@ export default function Login({ open, handleClose }) {
           </a>
         </p>
       </DialogContent>
-
-      <Register open={openRegister} handleClose={handleCloseRegister} />
     </BootstrapDialog>
   );
-}
+  }

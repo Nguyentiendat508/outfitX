@@ -1,7 +1,14 @@
-import { addDoc, collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { uploadImageToCloudinary } from "../config/cloudinaryConfig";
-
 
 export const fetchDocumentsRealtime = (collectionName, callback) => {
   const collectionRef = collection(db, collectionName);
@@ -22,57 +29,59 @@ export const fetchDocumentsRealtime = (collectionName, callback) => {
 };
 
 // Thêm tài liệu mới vào một bộ sưu tập cụ thể với tùy chọn tải lên hình ảnh
-export const addDocument = async (collectionName, values ) => {
+export const addDocument = async (collectionName, values) => {
   try {
-    
-      if(values?.imgUrl) {
-         const imgUrl = await uploadImageToCloudinary(values.imgUrl, collectionName);
-         values.imgUrl = imgUrl ;
-      }
-   
-     
-if (values?.imgUrls?.length > 0) {
+    if (values?.imgUrl) {
+      const imgUrl = await uploadImageToCloudinary(
+        values.imgUrl,
+        collectionName
+      );
+      values.imgUrl = imgUrl;
+    }
 
-  // Chờ tất cả ảnh upload xong rồi mới gán lại
-  const imgUrls = await Promise.all(
-    values.imgUrls.map((e) => uploadImageToCloudinary(e, collectionName))
-  );
+    if (values?.imgUrls?.length > 0) {
+      // Chờ tất cả ảnh upload xong rồi mới gán lại
+      const imgUrls = await Promise.all(
+        values.imgUrls.map((e) => uploadImageToCloudinary(e, collectionName))
+      );
 
-  values.imgUrls = imgUrls;
+      values.imgUrls = imgUrls;
+    }
 
-}
-       
-    await addDoc(collection(db, collectionName), values);
+   const docRef = await addDoc(collection(db, collectionName), values);
+    // Lấy lại data vừa add
+    const snapshot = await getDoc(docRef);
+
+    // Trả về object hoàn chỉnh
+    return {
+      id: docRef.id,
+      ...snapshot.data(),
+    };
   } catch (error) {
-    console.error('Error adding document:', error);
+    console.error("Error adding document:", error);
     throw error;
   }
 };
 
-
 export const deleteDocument = async (collectionName, values) => {
- 
   // Xóa tài liệu khỏi Firestore
   await deleteDoc(doc(collection(db, collectionName), values.id));
 };
 
 // Update a document in a given collection with an optional image upload
 export const updateDocument = async (collectionName, values) => {
-  if(values?.imgUrl) {
-    console.log("vfsvb");
-    
-         const imgUrl = await uploadImageToCloudinary(values.imgUrl, collectionName);
-         values.imgUrl = imgUrl ;
-      }
-if (values?.imgUrls?.length > 0) {
-  // Chờ tất cả ảnh upload xong rồi mới gán lại
-  const imgUrls = await Promise.all(
-    values.imgUrls.map((e) => uploadImageToCloudinary(e, collectionName))
-  );
+  if (values?.imgUrl) {
+    const imgUrl = await uploadImageToCloudinary(values.imgUrl, collectionName);
+    values.imgUrl = imgUrl;
+  }
+  if (values?.imgUrls?.length > 0) {
+    // Chờ tất cả ảnh upload xong rồi mới gán lại
+    const imgUrls = await Promise.all(
+      values.imgUrls.map((e) => uploadImageToCloudinary(e, collectionName))
+    );
 
-  values.imgUrls = imgUrls;
-}
-
-
-  await updateDoc(doc(collection(db, collectionName), values.id), values);
+    values.imgUrls = imgUrls;
+  }
+  const { id, ...newValues } = values;
+  await updateDoc(doc(collection(db, collectionName), id), newValues);
 };

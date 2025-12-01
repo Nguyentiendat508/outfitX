@@ -3,8 +3,8 @@ import Search from "../../../../components/admin/Search";
 import { addDocument, updateDocument } from "../../../../services/firebaseService";
 import TableBrands from "./TableBrands";
 import ModalBrands from "./ModalBrands";
-
-const inner = {name : "" , description : "", creatAt : new Date() , imgUrl : "https://theme.hstatic.net/200000471735/1001372461/14/logo.png?v=391" };
+import logo2 from "../../../../assets/logo2.png";
+const inner = {name : "" , description : "", creatAt : new Date() ,   imgUrl : logo2  };
 function Brands() {
   const [open, setOpen] = useState(false);
   const [brand, setBrand] = useState(inner);

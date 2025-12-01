@@ -53,3 +53,13 @@ export const LISTMENU = [
       ]
      }
 ]
+export const ROLES = {
+  ADMIN: 'admin',        // Quản trị viên 
+  USER: 'user',          // Người dùng 
+};
+
+export const initialOptions = {
+  "client-id": "AaBT7rjezkngPk0A4wBqWzzOBjSt9Kj9-b0ZvGtm4Egnuf9AIG_G6Y4ML0t83K3x22FB-M3vB01nzXQW",
+  currency: "USD",
+  intent: "capture"
+};

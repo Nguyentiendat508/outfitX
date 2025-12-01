@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { fetchDocumentsRealtime } from '../services/firebaseService';
 
 export const CategoriesContext = createContext();
+
 function CategoryProvider({children}) {
      const [categories,setCategories] = useState([]);
 
@@ -14,7 +15,7 @@ function CategoryProvider({children}) {
     // Hủy lắng nghe khi component bị unmount
     return () => unsubscribe();
      },[]);
-
+     
     return (
         <CategoriesContext.Provider value={categories}>
              {children}

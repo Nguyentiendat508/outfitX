@@ -92,19 +92,29 @@ export default function ModalProduct({
   return (
     <div>
       <Dialog
-        open={open}
-        slots={{
-          transition: Transition,
-        }}
-        sx={{ "& .MuiDialog-paper": { width: "80%", maxWidth: "none" } }}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{product.id ? "Edit Product" : "Add Product"}</DialogTitle>
+  open={open}
+  onClose={handleClose}
+  keepMounted
+  slots={{ transition: Transition }}
+  aria-describedby="alert-dialog-slide-description"
+  sx={{
+    "& .MuiDialog-container": {
+       backdropFilter: "blur(6px)",      // Làm mờ nền phía sau
+            background: "rgba(0,0,0,0.25)"    // Nền tối mờ
+    },
+    "& .MuiDialog-paper": {
+      width: "80%",
+      maxWidth: "none",
+      background: "rgba(255, 255, 255, 0.7)", 
+      borderRadius: "12px",
+      boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+    },
+  }}
+>
+        <DialogTitle className="">{product.id ? "Edit Product" : "Add Product"}</DialogTitle>
         <DialogContent>
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-            <div className="col-span-1">
+          <div className="grid md:grid-cols-2  grid-cols-1 gap-4">
+            <div className="col-span-1 ">
               <TextField
                 error={!!error.name}
                 helperText={error.name}
@@ -114,6 +124,7 @@ export default function ModalProduct({
                 name="name"
                 value={product.name}
                 onChange={handleChangeInput}
+             
               />
               <TextField
                 error={!!error.description}
@@ -121,6 +132,7 @@ export default function ModalProduct({
                 multiline
                 rows={2}
                 fullWidth
+                className="t-white"
                 label="Decription"
                 name="description"
                 value={product.description}
