@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaMapLocationDot, FaRegUser } from "react-icons/fa6";
 import { IoSearch } from "react-icons/io5";
@@ -15,6 +15,9 @@ import { CategoriesContext } from "../../contexts/CategoryProvider";
 import { CategoryTypesContext } from "../../contexts/CategoryTypeProvider";
 import Cart from "../../pages/client/cart/Cart";
 import SearchPage from "../../pages/client/search/SearchPage";
+import { OrderDetailContext } from "../../contexts/OrderDetailProvider";
+import { CartItemContext } from "../../contexts/CartItemProvider";
+import { filterById } from "../../services/reponsive";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -34,14 +37,22 @@ function Header({ openCart, setOpenCart }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const categories = useContext(CategoriesContext);
   const categoryTypes = useContext(CategoryTypesContext);
-
+  const [listCart, setListCart] = useState([]);
+  const cartItems = useContext(CartItemContext);
+  const totalQuantity = useMemo(() => {
+    if (!listCart) return 0;
+    return listCart.reduce((sum, item) => sum + item.quantity, 0);
+  }, [listCart]);
   const [query, setQuery] = useState("");
-
   const handleOpenRegister = () => {
     setOpenRegister(true);
     setOpen(false);
   };
 
+  useEffect(() => {
+    const list = filterById(cartItems, "user_id", accountLogin?.id);
+    setListCart(list);
+  }, [cartItems, accountLogin]);
   const handleCloseRegister = () => setOpenRegister(false);
 
   const handleClickOpen = () => {
@@ -65,6 +76,7 @@ function Header({ openCart, setOpenCart }) {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+
 
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-neutral-200">
@@ -141,7 +153,11 @@ function Header({ openCart, setOpenCart }) {
               <img
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="w-5 m-auto h-5 rounded-full cursor-pointer"
-                src={accountLogin.imgUrl ? accountLogin.imgUrl : "https://img7.thuthuatphanmem.vn/uploads/2023/10/15/anh-avatar-khong-hinh-dep_094008525.jpg" }
+                src={
+                  accountLogin.imgUrl
+                    ? accountLogin.imgUrl
+                    : "https://img7.thuthuatphanmem.vn/uploads/2023/10/15/anh-avatar-khong-hinh-dep_094008525.jpg"
+                }
                 alt="avatar"
               />
               <p>{accountLogin.name}</p>
@@ -186,10 +202,10 @@ function Header({ openCart, setOpenCart }) {
                 openCart ? "text-amber-400" : ""
               }`}
             />
-            <Cart openCart={openCart} />
+            <Cart openCart={openCart} listCart={listCart} />
             <p className={openCart ? "text-amber-300" : ""}>Giỏ Hàng</p>
             <p className="absolute flex justify-center text-[10px] right-1/2 translate-x-3.5 items-center w-4 h-4 rounded-full bg-white text-black top-0 -translate-y-2">
-              8
+              {totalQuantity}
             </p>
           </div>
         </div>
@@ -211,7 +227,10 @@ function Header({ openCart, setOpenCart }) {
           />
         </div>
 
-        <Link to={"/product"} className="flex cursor-pointer justify-between items-center gap-2">
+        <Link
+          to={"/product"}
+          className="flex cursor-pointer justify-between items-center gap-2"
+        >
           <p>Tất cả sản phẩm</p> <FaPlus className="md:hidden" />
         </Link>
 

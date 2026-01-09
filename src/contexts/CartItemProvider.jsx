@@ -9,7 +9,6 @@ function CartItemProvider({children}) {
        const unsubscribe = fetchDocumentsRealtime("cartItems", (list) => {
           setCartItems(list);
         });
-
     return () => unsubscribe();
      },[]);
 

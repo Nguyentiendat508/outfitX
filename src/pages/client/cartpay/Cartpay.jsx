@@ -48,6 +48,7 @@ function Cartpay() {
   const [province, setProvince] = useState([]);
   const [district, setDistrict] = useState([]);
   const [ward, setWard] = useState([]);
+  const [error, setError] = useState({});
 
   useEffect(() => {
     getAllProvince();
@@ -123,14 +124,40 @@ function Cartpay() {
   const createSubscription = async () => {
     order.userId = accountLogin?.id;
     order.total_amount = total;
-   const newOrder =  await addDocument("orders", order);
+    const newOrder = await addDocument("orders", order);
+    const payNew = {
+      order_id: newOrder.id,
+      paymentMethod: "Paypal",
+      amount: total,
+    };
+    await addDocument("payments", payNew);
     await Promise.all(
       listPay.map((item) => deleteDocument("cartItems", item)),
       listPay.map((item) => {
-         const { id , ...detail} = item;
-         addDocument("orderDetails", {...detail, orderId : newOrder.id})
-      } )
+        const { id, ...detail } = item;
+        addDocument("orderDetails", { ...detail, orderId: newOrder.id });
+      })
     );
+  };
+  //validation
+  const validateOrder = () => {
+    const newError = {};
+
+    newError.name = order.name ? "" : "Vui lòng nhập họ tên";
+    newError.sdt = /^0\d{9}$/.test(order.sdt)
+      ? ""
+      : "Số điện thoại không hợp lệ";
+    newError.province_id = order.province_id
+      ? ""
+      : "Vui lòng chọn Tỉnh/Thành phố";
+    newError.district_id = order.district_id ? "" : "Vui lòng chọn Quận/Huyện";
+    newError.ward_id = order.ward_id ? "" : "Vui lòng chọn Phường/Xã";
+    newError.address = order.address ? "" : "Vui lòng nhập địa chỉ";
+
+    setError(newError);
+
+    // return true = có lỗi
+    return Object.values(newError).some((e) => e !== "");
   };
 
   return (
@@ -154,6 +181,9 @@ function Cartpay() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập họ và tên"
                 />
+                {error.name && (
+                  <p className="text-red-500 text-sm">{error.name}</p>
+                )}
               </div>
 
               <div>
@@ -167,6 +197,7 @@ function Cartpay() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập số điện thoại"
                 />
+                <p className="text-red-500 text-sm">{error.sdt}</p>
               </div>
 
               <div className="relative">
@@ -183,6 +214,7 @@ function Cartpay() {
                     </option>
                   ))}
                 </select>
+                <p className="text-red-500 text-sm">{error.province_id}</p>
                 <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
               </div>
 
@@ -203,6 +235,7 @@ function Cartpay() {
                       </option>
                     ))}
                   </select>
+                  <p className="text-red-500 text-sm">{error.district_id}</p>
                   <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
                 </div>
               </div>
@@ -224,6 +257,7 @@ function Cartpay() {
                       </option>
                     ))}
                   </select>
+                  <p className="text-red-500 text-sm">{error.ward_id}</p>
                   <FiChevronDown className="absolute right-3 top-3 text-gray-400" />
                 </div>
               </div>
@@ -240,6 +274,7 @@ function Cartpay() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập địa chỉ cụ thể"
                 />
+                <p className="text-red-500 text-sm">{error.address}</p>
               </div>
 
               <div>
@@ -472,6 +507,9 @@ function Cartpay() {
               <PayPalButtons
                 style={{ layout: "vertical" }}
                 createOrder={(data, actions) => {
+                  if (validateOrder()) {
+                    return actions.reject(); // Ngăn PayPal mở popup
+                  }
                   const pricePay = (total / 25000).toFixed(2);
                   return actions.order.create({
                     purchase_units: [

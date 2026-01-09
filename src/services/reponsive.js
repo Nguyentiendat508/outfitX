@@ -1,7 +1,4 @@
-export const getOjectById = (data,id) => {
-   console.log(data);
-   console.log(id);
-   
+export const getOjectById = (data,id) => {  
    return data?.find(e => e.id == id) ;
 }
 export const filterById = (data, title, id) => {
@@ -27,3 +24,15 @@ export const convertsize = (size) => {
 export const convertString = (string ) => {
     return string.length > 30 ? string.slice(0,30) + "..." : string ;
 }
+
+export const formatTime = (ts) => {
+  if (!ts?.seconds) return "";
+  const d = new Date(ts.seconds * 1000);
+  return d.toLocaleString("vi-VN", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};

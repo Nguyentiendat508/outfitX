@@ -46,7 +46,6 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
   const products = useContext(ProductsContext);
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
-  console.log(products);
   
   const handleChange = (e, value) => setPage(value);
   const handleCloseDeleted = () => setOpenDeleted(false);
@@ -73,7 +72,6 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
     handleClickOpen();
     setProduct(row);
   };
-console.log(visibleRows);
 
   return (
     <>

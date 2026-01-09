@@ -43,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 function TableCategory({ handleClickOpen, categoryType, setCategoryType, search = "" }) {
   const [openDeleted, setOpenDeleted] = useState(false);
   const [page, setPage] = useState(1);
-  const rowsPerPage = 7;
+  const rowsPerPage = 5;
 
   const categoryTypes = useContext(CategoryTypesContext);
   const categories = useContext(CategoriesContext);

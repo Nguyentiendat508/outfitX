@@ -25,6 +25,7 @@ function ButtonGoogle({handleClose}) {
           name: user.displayName,
           imgUrl: user.photoURL,
           role: ROLES.USER,
+          email : user.email,
         };
         const accLogin = await addDocument("accounts", newCustomer);
         loggedInCustomer = accLogin;

@@ -12,6 +12,10 @@ import AuthProvider from "./contexts/AuthProvider.jsx";
 import CartItemProvider from "./contexts/CartItemProvider.jsx";
 import OrderProvider from "./contexts/OrderProvider.jsx";
 import ProvinceProvider from "./contexts/ProvinceProvider.jsx";
+import OrderDetailProvider from "./contexts/OrderDetailProvider.jsx";
+import { NotificationProvider } from "./contexts/NotificationProvider.jsx";
+import ReviewProvider from "./contexts/ReviewProvider.jsx";
+import RefundProvider from "./contexts/RefundProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -23,8 +27,16 @@ createRoot(document.getElementById("root")).render(
               <AuthProvider>
                 <CartItemProvider>
                   <OrderProvider>
-                    <ProvinceProvider>                  
-                          <App />
+                    <ProvinceProvider>
+                      <OrderDetailProvider>
+                        <NotificationProvider>
+                          <ReviewProvider>
+                           <RefundProvider>
+                              <App />
+                           </RefundProvider>             
+                          </ReviewProvider>
+                        </NotificationProvider>
+                      </OrderDetailProvider>
                     </ProvinceProvider>
                   </OrderProvider>
                 </CartItemProvider>

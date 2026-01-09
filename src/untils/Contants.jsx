@@ -1,5 +1,14 @@
 import { GiMetalHand } from "react-icons/gi";
 import { MdContactless, MdOutlineBrandingWatermark } from "react-icons/md";
+import {
+  HiOutlineClock,
+  HiOutlineCog,
+  HiOutlineTruck,
+  HiCheckCircle,
+  HiOutlineXCircle,
+  HiArrowCircleLeft,
+  HiOutlineRefresh,
+} from "react-icons/hi";
 
 export const LISTMENU = [
      {
@@ -13,7 +22,7 @@ export const LISTMENU = [
             {
                 path : "/admin/category_type",
                 name : "Category Type"
-            }
+            },
         ]
      },
      {
@@ -29,7 +38,7 @@ export const LISTMENU = [
                 name : "Products"
             },
             {
-                path : "/orders",
+                path : "/admin/orders",
                 name : "Orders"
             }
         ]
@@ -39,8 +48,8 @@ export const LISTMENU = [
       icon :<MdContactless />,
       items : [
         {
-            path: "/rate",
-            name: "Rate"
+            path: "admin/refund",
+            name: "Refund"
         },
         {
             path: "/blogs",
@@ -51,7 +60,7 @@ export const LISTMENU = [
             name: "Contacts"
         }
       ]
-     }
+     },
 ]
 export const ROLES = {
   ADMIN: 'admin',        // Quản trị viên 
@@ -63,3 +72,55 @@ export const initialOptions = {
   currency: "USD",
   intent: "capture"
 };
+
+export const ORDER_STATUSES = [
+  {
+    id: "Pending",
+    title: "Chờ xử lý",
+    icon: <HiOutlineClock />,                // lưu component (thực thi: <HiOutlineClock />)
+    color: "#ef4444", // các lớp Tailwind để áp cho badge
+    level : 1,
+  },
+  {
+    id: "Processing",
+    title: "Đang xử lý",
+    icon: <HiOutlineCog />,
+    color: "#3b82f6",
+    level : 2,
+  },
+  {
+    id: "Shipped",
+    title: "Đã giao cho đơn vị vận chuyển",
+    icon: <HiOutlineTruck />,
+    color: "#6366f1",
+    level : 3,
+  },
+  {
+    id: "Delivered",
+    title: "Đã giao",
+    icon: <HiCheckCircle />,
+    color: "#10b981",
+    level : 4,
+  },
+  {
+    id: "Cancelled",
+    title: "Đã hủy",
+    icon: <HiOutlineXCircle />,
+    color: "gray",
+    level : 5,
+  },
+  {
+    id: "Returned",
+    title: "Trả hàng",
+    icon: <HiArrowCircleLeft />,
+    color: "#ec4899",
+    level : 6,
+  },
+  {
+    id: "Refunded",
+    title: "Hoàn tiền",
+    icon: < HiOutlineRefresh />,
+    color: "#f59e0b",
+    level : 7,
+  },
+];

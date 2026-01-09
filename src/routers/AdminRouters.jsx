@@ -4,14 +4,13 @@ import Categories from "../pages/admin/metadata/categories/Categories";
 import CategoryType from "../pages/admin/metadata/category_types/CategoryType";
 import Blog from "../pages/admin/contents/blogs/Blog";
 import Contacts from "../pages/admin/contents/contacts/contacts";
-import Rate from "../pages/admin/contents/rate/rate";
 import Brands from "../pages/admin/commerce/brands/Brands";
 import Orders from "../pages/admin/commerce/orders/Orders";
 import Products from "../pages/admin/commerce/products/Products";
-import NavBarAdmin from "../components/admin/NavBarAdmin";
-import HeaderAdmin from "../components/admin/HeaderAdmin";
-import Background from "../components/admin/Background";
 import { Route, Routes } from "react-router-dom";
+import OrderDetail from "../pages/admin/commerce/orders/OrderDetail";
+import Accounts from "../pages/admin/accounts/Accounts";
+import Refund from "../pages/admin/contents/refund/Refund";
 
 function AdminRouters() {
   const routers = [
@@ -36,8 +35,8 @@ function AdminRouters() {
       Element: <Contacts />,
     },
     {
-      path: "/admin/rate",
-      Element: <Rate />,
+      path: "/admin/refund",
+      Element: <Refund/>,
     },
     {
       path: "/admin/brands",
@@ -48,9 +47,18 @@ function AdminRouters() {
       Element: <Orders />,
     },
     {
+      path: "/admin/orders/:id",
+      Element: <OrderDetail />,
+    },
+
+    {
       path: "/admin/products",
       Element: <Products />,
     },
+    {
+      path: "/admin/accounts",
+      Element: <Accounts/>,
+    }
   ];
   return (
     <Routes>

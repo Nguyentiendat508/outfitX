@@ -48,11 +48,11 @@ function Product() {
           ))}
         </div>
       </div>
-    <div className="flex justify-center items-center ">
-  <button className="bg-black mb-5 text-white border text-xs font-medium px-2 py-1 rounded-md ">
-    Xem thêm
-  </button>
-</div>
+      <div className="flex justify-center items-center ">
+        <button className="bg-black mb-5 text-white border text-xs font-medium px-2 py-1 rounded-md ">
+          Xem thêm
+        </button>
+      </div>
     </div>
   );
 }

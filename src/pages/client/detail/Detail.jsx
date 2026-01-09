@@ -12,13 +12,15 @@ import { CategoryTypesContext } from "../../../contexts/CategoryTypeProvider";
 import { addDocument, updateDocument } from "../../../services/firebaseService";
 import { AuthContext } from "../../../contexts/AuthProvider";
 import { CartItemContext } from "../../../contexts/CartItemProvider";
-import ProductSlider from "../carousel/ProductSlider";
-import ProductHangmoi from "../carousel/ProductHangmoi";
+import { IoMdStar } from "react-icons/io";
+import { ReviewContext } from "../../../contexts/ReviewProvider";
+import { Rating } from "@mui/material";
 
 const inner = { product_id: "", quantity: 1, user_id: "", color: "", size: "" };
 function Detail() {
   const products = useContext(ProductsContext);
   const categoryTypes = useContext(CategoryTypesContext);
+  const review = useContext(ReviewContext);
   const { accountLogin } = useContext(AuthContext);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [product, setProduct] = useState({});
@@ -49,9 +51,6 @@ function Detail() {
     }
     newError.color = cartItem.color ? "" : "vui lòng chọn màu sắc";
     newError.size = cartItem.size ? "" : "vui lòng chọn size";
-    // kiem tra login chua
-    // kiem tra color
-    // kiem tra size
     setError(newError);
     return Object.values(newError).some((b) => b !== "");
   };
@@ -85,6 +84,11 @@ function Detail() {
     addToCart();
     navigate("/pay");
   };
+
+  const productReviews = review.filter((r) => r.product_id === id);
+  productReviews.reduce((sum, r) => sum + r.rate, 0) /
+    (productReviews.length || 1);
+
   return (
     <div className="bg-black">
       <h3 className="text-white text-xs">
@@ -264,6 +268,16 @@ function Detail() {
               >
                 MÔ TẢ
               </button>
+              <button
+                onClick={() => setTab("danhgia")}
+                className={`px-6 py-4 font-medium ${
+                  tab === "danhgia"
+                    ? "border-b-2 border-black text-black"
+                    : "text-gray-500"
+                }`}
+              >
+                ĐÁNH GIÁ
+              </button>
 
               {/* CHÍNH SÁCH GIAO HÀNG */}
               <button
@@ -299,6 +313,50 @@ function Detail() {
                 <p className="mb-4 text-gray-700">{product.description}</p>
               </div>
             )}
+            {/* Đánh Gía*/}
+            {tab === "danhgia" && (
+              <div className="max-w-4xl">
+                <h2 className="text-2xl font-semibold mb-8">
+                  TẤT CẢ ĐÁNH GIÁ ({productReviews.length})
+                </h2>
+
+                <div className="space-y-10">
+                  {productReviews.map((e) => (
+                    <div key={e.id} className="border-t pt-6">
+                      {/* STAR */}
+                      <Rating value={e.rate} readOnly size="small" />
+
+                      {/* USER + DATE */}
+                      <p className="mt-2 text-sm font-bold text-gray-900">
+                        {e.user_id?.slice(0, 10)}***{" "}
+                        <span className="font-normal text-black">
+                          – {e.newDate?.toDate?.().toLocaleDateString("vi-VN")}
+                        </span>
+                      </p>
+
+                      {/* CONTENT */}
+                      <p className="mt-2 italic text-gray-800 leading-relaxed max-w-3xl">
+                        {e.description}
+                      </p>
+
+                      {/* IMAGES */}
+                      {e.imgUrls?.length > 0 && (
+                        <div className="mt-4 flex gap-4">
+                          {e.imgUrls.map((img, i) => (
+                            <img
+                              key={i}
+                              src={img}
+                              alt=""
+                              className="w-20 h-20 object-cover rounded-md"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* TAB: CHÍNH SÁCH GIAO HÀNG */}
             {tab === "giao-hang" && (
@@ -328,7 +386,6 @@ function Detail() {
           </div>
         </div>
       </div>
-     
     </div>
   );
 }

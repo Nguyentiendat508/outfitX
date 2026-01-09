@@ -10,6 +10,7 @@ import Cartpay from "../pages/client/cartpay/Cartpay";
 import OrderPage from "../pages/client/order/OrderPage";
 import Product from "../pages/client/product/Product";
 import OrderItem from "../pages/client/order/OrderItem";
+import OrderReview from "../pages/client/order/OrderReview";
 
 function ClientRouters() {
   const routers = [
@@ -45,6 +46,10 @@ function ClientRouters() {
       path: "/product",
       Element: <Product />,
     },
+    {
+      path: "/review/:id",
+      Element: <OrderReview />,
+    }
   ];
 
   return (

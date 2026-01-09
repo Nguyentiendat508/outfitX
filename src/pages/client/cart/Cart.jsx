@@ -1,23 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { HiXMark } from "react-icons/hi2";
-import { filterById, getOjectById } from "../../../services/reponsive";
-import { AuthContext } from "../../../contexts/AuthProvider";
-import { CartItemContext } from "../../../contexts/CartItemProvider";
+import React, { useContext } from "react";
+
+import { getOjectById } from "../../../services/reponsive";
+
 import { ProductsContext } from "../../../contexts/ProductProvider";
 import { Link, Navigate } from "react-router-dom";
 
-function Cart({ openCart }) {
-  const [listCart, setListCart] = useState([]);
-  const { accountLogin } = useContext(AuthContext);
-  const cartItems = useContext(CartItemContext);
+function Cart({ openCart, listCart }) {
   const products = useContext(ProductsContext);
   const PayProduct = () => {
-     Navigate("/pay");
-  }
-  useEffect(() => {
-    const list = filterById(cartItems, "user_id", accountLogin?.id);
-    setListCart(list);
-  }, [cartItems, accountLogin]);
+    Navigate("/pay");
+  };
 
   //tong tien
   const total = listCart.reduce((t, i) => {
@@ -83,7 +75,10 @@ function Cart({ openCart }) {
             <button className="flex-1 p-1 border text-sm font-semibold hover:bg-black hover:text-white">
               CHỈNH SỬA GIỎ HÀNG
             </button>
-            <Link to={"/pay"} className="flex-1 text-sm bg-black text-center text-white px-4 py-2 font-semibold hover:bg-white hover:text-black">
+            <Link
+              to={"/pay"}
+              className="flex-1 text-sm bg-black text-center text-white px-4 py-2 font-semibold hover:bg-white hover:text-black"
+            >
               THANH TOÁN
             </Link>
           </div>
