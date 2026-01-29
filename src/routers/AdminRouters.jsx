@@ -3,7 +3,6 @@ import DashBoard from "../pages/admin/dashboard/DashBoard";
 import Categories from "../pages/admin/metadata/categories/Categories";
 import CategoryType from "../pages/admin/metadata/category_types/CategoryType";
 import Blog from "../pages/admin/contents/blogs/Blog";
-import Contacts from "../pages/admin/contents/contacts/contacts";
 import Brands from "../pages/admin/commerce/brands/Brands";
 import Orders from "../pages/admin/commerce/orders/Orders";
 import Products from "../pages/admin/commerce/products/Products";
@@ -29,10 +28,6 @@ function AdminRouters() {
     {
       path: "/admin/blogs",
       Element: <Blog />,
-    },
-    {
-      path: "/admin/contacts",
-      Element: <Contacts />,
     },
     {
       path: "/admin/refund",
