@@ -1,17 +1,13 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useState } from "react";
 import { FaRocketchat } from "react-icons/fa";
-
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 export default function Chat() {
-  
+
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
     { role: "assistant", content: "Xin Chào Tôi Là Gemini AI" },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(genAI);
 
   const sendMessage = async () => {
     // dua du lieu san pham cho no => tu van dua tren san pham minh dang co 
@@ -24,7 +20,7 @@ export default function Chat() {
     setLoading(true);
 
     try {
-      const model = genAI.getGenerativeModel({
+      const model = import.meta.env.VITE_GEMINI_API_KEY.getGenerativeModel({
         model: "gemini-3-flash-preview",
         contents: "Explain how AI works in a few words",
       });
