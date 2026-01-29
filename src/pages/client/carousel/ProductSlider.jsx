@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 export default function ProductSlider() {
   const products = useContext(ProductsContext);
   const categoryTypes = useContext(CategoryTypesContext);
+  const priceDiscount = (price,discount) => {
+  return parseInt(price) - price*discount/100 ;
+}
   const [imgHover, setImgHover] = useState(null);
   return (
     <div className="">
@@ -43,10 +46,10 @@ export default function ProductSlider() {
                     src={item.imgUrls[`${imgHover == item.id ? 0 : 1}`]}
                     alt={item.name}
                     onMouseEnter={() => setImgHover(item.id)}
-                    className="w-full h-full object-cover "
+                    className="w-60 h-50 object-cover "
                   />
                   <div className="mt-2">
-                    <h3 className="font-semibold text-sm h-[48px]">
+                    <h3 className="font-semibold text-xs h-[50px]">
                       {item.name}
                     </h3>
                     <div className="flex gap-4">
@@ -112,17 +115,17 @@ export default function ProductSlider() {
               <Link to={`/detail/${item.id}`}>
                 <div className="bg-white rounded-md shadow-md hover:shadow-xl transition overflow-hidden border border-gray-200">
                   <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] px-2 py-1 rounded-md font-bold">
-                    10%
+                    {item.discount && <>{item.discount} %</>}
                   </div>
                   <img
                     src={item.imgUrls[`${imgHover == item.id ? 0 : 1}`]}
                     alt={item.name}
                     onMouseEnter={() => setImgHover(item.id)}
                     onMouseLeave={() => setImgHover(null)}
-                    className="w-full object-cover"
+                    className="w-60 h-50 object-cover"
                   />
                   <div className="p-3">
-                    <h3 className="text-sm font-semibold leading-5 h-[40px]">
+                    <h3 className="text-sm font-semibold leading-5 h-[50px]">
                       {item.name}
                     </h3>
 
@@ -131,7 +134,7 @@ export default function ProductSlider() {
                     </p>
 
                     <p className="text-gray-400 text-xs line-through -mt-1">
-                      349,000₫
+                      {priceDiscount(item.price,item.discount).toLocaleString("vi-VN")}₫
                     </p>
                   </div>
                   <div className="absolute bottom-3 right-3 opacity-80">

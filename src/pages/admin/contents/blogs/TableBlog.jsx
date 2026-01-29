@@ -14,6 +14,8 @@ import ModalDelete from "../../../../components/admin/ModalDeleted";
 import { deleteDocument } from "../../../../services/firebaseService";
 import PaginationTable from "../../../../components/admin/PaginationTable";
 import { BrandsContext } from "../../../../contexts/BrandsProvider";
+import { BlogContext } from "../../../../contexts/BlogProvider";
+import { convertString } from "../../../../services/reponsive";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -38,9 +40,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
+function TableBLog({handleClickOpen, search="", blogs, setBlog}) {
   const [openDeleted, setOpenDeleted] = useState(false);
-  const brands = useContext(BrandsContext);
+  const blog = useContext(BlogContext);
   const [page, setPage] = useState(1);
   const rowsPerPage = 5;
   const handleChange = (e, value) => {
@@ -52,26 +54,26 @@ function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
 
   const handleOpenDeleted = (row) => {
     setOpenDeleted(true);
-    setBrand(row);
+    setBlog(row);
   };
 
   const visibleRows = useMemo(() => {
-    if (!brands) return [];
+    if (!blog) return [];
     const q = (search || "").toLowerCase().trim();
     return q
-      ? brands
+      ? blog
           .slice((page - 1) * rowsPerPage, page * rowsPerPage)
           .filter((e) => (e.name || "").toLowerCase().includes(q))
-      : brands;
-  }, [brands, search]);
+      : blog;
+  }, [blog, search]);
 
   const handleDeleted = async () => {
-    await deleteDocument("brands", brand);
+    await deleteDocument("blogs", blogs);
     handleCloseDeleted();
   };
   const handleEdit = (row) => {
     handleClickOpen();
-    setBrand(row);
+    setBlog(row);
   };
   return (
     <>
@@ -89,9 +91,10 @@ function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
           <TableHead>
             <TableRow>
               <StyledTableCell>#</StyledTableCell>
-              <StyledTableCell align="left">Name</StyledTableCell>
-              <StyledTableCell align="left">Description</StyledTableCell>
-              <StyledTableCell align="left">Logo</StyledTableCell>
+              <StyledTableCell align="left">Title</StyledTableCell>
+              <StyledTableCell align="left">Image</StyledTableCell>
+              <StyledTableCell align="center">Content</StyledTableCell>
+              <StyledTableCell align="center">Created_at</StyledTableCell>
               <StyledTableCell align="center">Action</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -111,10 +114,7 @@ function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
                     <StyledTableCell component="th" scope="row">
                       {index + 1 + rowsPerPage * (page - 1)}
                     </StyledTableCell>
-                    <StyledTableCell align="left">{row.name}</StyledTableCell>
-                    <StyledTableCell align="left">
-                      {row.description}
-                    </StyledTableCell>
+                    <StyledTableCell align="left">{row.title}</StyledTableCell>
                     <StyledTableCell align="left">
                       <div className="bg-white backdrop-blur-sm rounded-lg p-1 w-20 h-10 flex items-center justify-center">
                         <img
@@ -123,6 +123,12 @@ function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
                           className="max-w-full max-h-full object-contain brightness-125"
                         />
                       </div>
+                    </StyledTableCell>
+                    <StyledTableCell align="left">
+                      {convertString(row.content)}
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      {row.creatAt.toDate().toLocaleString()}
                     </StyledTableCell>
                     <StyledTableCell align="center">
                       <div className="flex gap-1 justify-center ">
@@ -162,4 +168,4 @@ function TableBrands({ handleClickOpen, search = "", brand, setBrand }) {
   );
 }
 
-export default TableBrands;
+export default TableBLog;

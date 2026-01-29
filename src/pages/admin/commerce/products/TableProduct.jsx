@@ -20,7 +20,7 @@ import { BrandsContext } from "../../../../contexts/BrandsProvider";
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     color: "#fff",
     fontWeight: "bold",
   },
@@ -33,12 +33,10 @@ const StyledTableCell = styled(TableCell)(() => ({
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  backgroundColor: "transparent",
-  "&:nth-of-type(odd)": {
-    backgroundColor: "rgba(255,255,255,0.05)",
+  "&:last-child td, &:last-child th": {
+    border: 0,
   },
 }));
-
 function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
   const categoryTypes = useContext(CategoryTypesContext);
   const brands = useContext(BrandsContext);
@@ -84,7 +82,6 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
           color: "white",
           mt: 5,
         }}
-        className="text-white"
       >
         <Table>
           <TableHead>
@@ -138,7 +135,7 @@ function TableProduct({ handleClickOpen, search = "", setProduct, product }) {
                     {row.size?.join(", ")}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 border border-white rounded-full">
                       {row.color.map((e, index) => (
                         <div
                           style={{ background: e }}

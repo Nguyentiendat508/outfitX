@@ -16,6 +16,7 @@ import OrderDetailProvider from "./contexts/OrderDetailProvider.jsx";
 import { NotificationProvider } from "./contexts/NotificationProvider.jsx";
 import ReviewProvider from "./contexts/ReviewProvider.jsx";
 import RefundProvider from "./contexts/RefundProvider.jsx";
+import BlogProvider from "./contexts/BlogProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
@@ -32,7 +33,9 @@ createRoot(document.getElementById("root")).render(
                         <NotificationProvider>
                           <ReviewProvider>
                            <RefundProvider>
+                            <BlogProvider>
                               <App />
+                            </BlogProvider>
                            </RefundProvider>             
                           </ReviewProvider>
                         </NotificationProvider>

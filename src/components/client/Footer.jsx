@@ -37,7 +37,7 @@ function Footer() {
             </form>
           </div>
         </div>
-        <div className="mt-8 border-t flex items-center justify-center border-neutral-200 pt-6 text-xs text-neutral-500">© {new Date().getFullYear()} OutfitX. All rights reserved.</div>
+        <div className="mt-8 border-t flex items-center justify-center border-neutral-200 pt-6 text-xs text-neutral-500">© {new Date().getFullYear()} TDSHOP. All rights reserved.</div>
       </div>
     </footer>
   )

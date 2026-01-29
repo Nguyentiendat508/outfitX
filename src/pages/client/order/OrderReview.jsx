@@ -37,6 +37,7 @@ const rest = {
   imgUrls: [],
   description: "",
   newDate: new Date(),
+  price: 0,
 };
 const OrderReview = () => {
   const [selectedItem, setSelectedItem] = useState(inner);
@@ -52,6 +53,7 @@ const OrderReview = () => {
   const navigate = useNavigate();
   const { accountLogin } = useContext(AuthContext);
   const { id } = useParams();
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     const ob = getOjectById(orders, id);
@@ -127,9 +129,9 @@ const OrderReview = () => {
       ...refund,
       order_id: id,
       newDate: new Date(),
-      status: "Returned",
+      status: "Waiting",
       product_id: idProduct,
-      //thêm price 
+      price: price,
     };
     await addDocument("refund", payload);
     await updateDocument("orders", { ...order, status: "Returned" });
@@ -138,7 +140,7 @@ const OrderReview = () => {
 
   const checkRefund = (productId) => {
     const check = refunds.some(
-      (r) => r.order_id == id && r.product_id == productId
+      (r) => r.order_id == id && r.product_id == productId,
     );
     return check;
   };
@@ -215,7 +217,7 @@ const OrderReview = () => {
                   </h3>
                   <p className="font-semibold text-red-500 whitespace-nowrap">
                     {Number(
-                      getOjectById(products, item.product_id)?.price || 0
+                      getOjectById(products, item.product_id)?.price || 0,
                     ).toLocaleString("vi-VN")}
                     ₫
                   </p>
@@ -230,13 +232,20 @@ const OrderReview = () => {
                   </div>
 
                   <button
-                    onClick={() => setIdProduct(item.product_id)}
+                    onClick={() => {
+                      setIdProduct(item.product_id);
+
+                      const product = getOjectById(products, item.product_id);
+                      const totalPrice = (product?.price || 0) * item.quantity;
+
+                      setPrice(totalPrice); // ✅ setPrice dùng ở đây
+                    }}
                     className={`rounded-md p-2 text-white text-sm ${
                       checkRefund(item.product_id)
                         ? "bg-amber-400"
                         : idProduct == item.product_id
-                        ? "bg-green-600"
-                        : "bg-gray-400"
+                          ? "bg-green-600"
+                          : "bg-gray-400"
                     }`}
                   >
                     {checkRefund(item.product_id) ? "Đang trả hàng" : "Đã giao"}

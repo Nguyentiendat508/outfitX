@@ -46,7 +46,6 @@ function Products() {
       : "vui long nhap gia";
       newError.stock = product.stock ? "" : "Vui long nhap stock";
       newError.cateType = product.id_cate_type ?"" : "Vui long chon danh muc";
-      newError.brand = product.id_brand ? "" : "Vui long chon the loai";
       newError.size = product.size ? "" : "Vui long nhap size";
       newError.color = product.color ? "" : "Vui long nhap mau";
     setError(newError);

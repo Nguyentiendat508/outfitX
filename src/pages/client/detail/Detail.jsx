@@ -12,14 +12,15 @@ import { CategoryTypesContext } from "../../../contexts/CategoryTypeProvider";
 import { addDocument, updateDocument } from "../../../services/firebaseService";
 import { AuthContext } from "../../../contexts/AuthProvider";
 import { CartItemContext } from "../../../contexts/CartItemProvider";
-import { IoMdStar } from "react-icons/io";
 import { ReviewContext } from "../../../contexts/ReviewProvider";
 import { Rating } from "@mui/material";
+import  { AccountContext } from "../../../contexts/AccountProvider";
 
 const inner = { product_id: "", quantity: 1, user_id: "", color: "", size: "" };
 function Detail() {
   const products = useContext(ProductsContext);
   const categoryTypes = useContext(CategoryTypesContext);
+  const accounts = useContext(AccountContext);
   const review = useContext(ReviewContext);
   const { accountLogin } = useContext(AuthContext);
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -89,13 +90,16 @@ function Detail() {
   productReviews.reduce((sum, r) => sum + r.rate, 0) /
     (productReviews.length || 1);
 
+const StringConvert = (str) => {
+   const arrayString = str?.split(".");
+   return arrayString?.map((item) => <div>{item}</div>)
+}
   return (
-    <div className="bg-black">
-      <h3 className="text-white text-xs">
-        Trang chủ CT IT ALL PRODUCT TEST Áo Sơ Mi Nam Tay Dài ICONDENIM Rogne
-        Bear
+    <div className="bg-black pb-10">
+      <h3 className="text-white text-xs p-2">
+          <Link to={"/"}> Trang chủ / </Link> <span className="text-white font-medium">Veston</span> 
       </h3>
-      <div className="max-w-7xl mt-2 bg-white mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="max-w-7xl mt-5 bg-white mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
         <div>
           <Swiper
             modules={[Navigation, Thumbs]}
@@ -310,7 +314,7 @@ function Detail() {
             {/* TAB: MÔ TẢ */}
             {tab === "mo-ta" && (
               <div>
-                <p className="mb-4 text-gray-700">{product.description}</p>
+                <p className="mb-4 text-gray-700">{StringConvert(product.description)}</p>
               </div>
             )}
             {/* Đánh Gía*/}
@@ -328,7 +332,7 @@ function Detail() {
 
                       {/* USER + DATE */}
                       <p className="mt-2 text-sm font-bold text-gray-900">
-                        {e.user_id?.slice(0, 10)}***{" "}
+                        {getOjectById(accounts, e.user_id)?.name}
                         <span className="font-normal text-black">
                           – {e.newDate?.toDate?.().toLocaleDateString("vi-VN")}
                         </span>

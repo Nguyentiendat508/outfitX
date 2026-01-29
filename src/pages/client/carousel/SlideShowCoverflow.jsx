@@ -1,4 +1,4 @@
-import React, { useContext} from "react";
+import React from "react";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -8,10 +8,8 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 // import required modules
 import { EffectCoverflow, Pagination } from "swiper/modules";
-import { ProductsContext } from "../../../contexts/ProductProvider";
 
-export default function SlideShowCoverflow() {
-  const products = useContext(ProductsContext);
+export default function SlideShowCoverflow({ data }) {
   return (
     <div className="mt-2">
       <Swiper
@@ -31,7 +29,7 @@ export default function SlideShowCoverflow() {
         modules={[EffectCoverflow, Pagination]}
         className="mySwiperflow"
       >
-        {products.map((p) => (
+        {data.map((p) => (
           <SwiperSlide>
             <img src={p.imgUrls[0]} />
           </SwiperSlide>

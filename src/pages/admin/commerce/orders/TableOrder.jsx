@@ -15,7 +15,7 @@ import { ORDER_STATUSES } from "../../../../untils/Contants";
 import { getOjectById } from "../../../../services/reponsive";
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
     color: "#fff",
     fontWeight: "bold",
   },
@@ -28,9 +28,8 @@ const StyledTableCell = styled(TableCell)(() => ({
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  backgroundColor: "transparent",
-  "&:nth-of-type(odd)": {
-    backgroundColor: "rgba(255,255,255,0.05)",
+  "&:last-child td, &:last-child th": {
+    border: 0,
   },
 }));
 
@@ -63,7 +62,6 @@ const handleDetail = (row) => {
           color: "white",
           mt: 5,
         }}
-        className="text-white"
       >
         <Table>
           <TableHead>

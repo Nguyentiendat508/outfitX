@@ -52,7 +52,7 @@ export const LISTMENU = [
             name: "Refund"
         },
         {
-            path: "/blogs",
+            path: "admin/blogs",
             name: "Blogs"
         },
         {
@@ -62,10 +62,6 @@ export const LISTMENU = [
       ]
      },
 ]
-export const ROLES = {
-  ADMIN: 'admin',        // Quản trị viên 
-  USER: 'user',          // Người dùng 
-};
 
 export const initialOptions = {
   "client-id": "AaBT7rjezkngPk0A4wBqWzzOBjSt9Kj9-b0ZvGtm4Egnuf9AIG_G6Y4ML0t83K3x22FB-M3vB01nzXQW",
@@ -124,3 +120,8 @@ export const ORDER_STATUSES = [
     level : 7,
   },
 ];
+export const ROLES = {
+  ADMIN: 'admin',        // Quản trị viên cấp cao
+  MODERATOR: 'moderator', // Quản trị viên cấp trung (người kiểm duyệt)
+  USER: 'user',          // Người dùng thông thường
+};

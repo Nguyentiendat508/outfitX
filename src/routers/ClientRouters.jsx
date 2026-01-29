@@ -11,6 +11,9 @@ import OrderPage from "../pages/client/order/OrderPage";
 import Product from "../pages/client/product/Product";
 import OrderItem from "../pages/client/order/OrderItem";
 import OrderReview from "../pages/client/order/OrderReview";
+import Brand from "../pages/client/brand/Brand";
+import Blog from "../pages/client/blog/Blog";
+import BlogDetail from "../pages/client/blog/BlogDetall";
 
 function ClientRouters() {
   const routers = [
@@ -49,6 +52,18 @@ function ClientRouters() {
     {
       path: "/review/:id",
       Element: <OrderReview />,
+    },
+    {
+      path: "/brand/:id",
+      Element: <Brand/>,
+    },
+    {
+      path: "/blog",
+      Element: <Blog/>,
+    },
+    {
+      path: "/blogDetail/:id",
+      Element: <BlogDetail/>,
     }
   ];
 

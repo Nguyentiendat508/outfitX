@@ -41,7 +41,6 @@ const OrderPage = () => {
     setOrderShow(list);
   }, [orders, accountLogin]);
 
-  //
   const dangmua = useMemo(() => {
     const countbuy = orderShow.filter(
       (e) => getOjectById(ORDER_STATUSES, e.status).level <= 3
@@ -84,12 +83,10 @@ const OrderPage = () => {
         return orderShow;
     }
   }, [orderShowStatus, orderShow]);
-  
-  
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-10">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <div className="min-h-screen px-4 py-10">
+      <div className="max-w-6xl mx-auto bg-white p-4 rounded-2xl space-y-8">
         <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.2em] text-gray-500">
@@ -100,9 +97,12 @@ const OrderPage = () => {
             </h1>
           </div>
           <div className="flex gap-3">
-            <button  className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800">
+            <Link
+              to={"/product"}
+              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-semibold text-white hover:bg-gray-800"
+            >
               + Đặt hàng mới
-            </button>
+            </Link>
           </div>
         </header>
 

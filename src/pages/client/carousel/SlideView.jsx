@@ -18,7 +18,7 @@ export default function SlideView() {
       spaceBetween={30}
       pagination={{ clickable: true }}
       modules={[Pagination]}
-      className="mySwiper"
+      className="mySwiper w-full h-90"
     >
       {products.map((p) => (
                 <SwiperSlide>
