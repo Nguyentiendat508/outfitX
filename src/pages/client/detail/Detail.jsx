@@ -36,6 +36,10 @@ function Detail() {
     setProduct(ob || {});
   }, [id, products]);
 
+  const priceDiscount = (price,discount) => {
+  return parseInt(price) - price*discount/100 ;
+}
+
   const giam = () => {
     if (cartItem.quantity > 1)
       setCartItem((pre) => ({ ...cartItem, quantity: pre.quantity - 1 }));
@@ -150,10 +154,7 @@ const StringConvert = (str) => {
           </p>
 
           <p className="text-4xl font-bold text-red-500 mt-4">
-            {parseInt(product?.price)?.toLocaleString("vi-VN", {
-              style: "currency",
-              currency: "VND",
-            })}
+            {priceDiscount(product.price,product.discount).toLocaleString("vi-VN")}₫
           </p>
           <div className=" border p-4 rounded-xl mt-5">
             <p className="font-semibold mb-3">🎁 KHUYẾN MÃI – ƯU ĐÃI</p>
