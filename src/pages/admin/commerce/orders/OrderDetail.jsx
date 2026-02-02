@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { OrderContext } from "../../../../contexts/OrderProvider";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import {
   filterById,
   formatTime,
@@ -19,101 +19,39 @@ import {
 import { OrderDetailContext } from "../../../../contexts/OrderDetailProvider";
 import { ProductsContext } from "../../../../contexts/ProductProvider";
 import { ORDER_STATUSES } from "../../../../untils/Contants";
-import { updateDocument } from "../../../../services/firebaseService";
-import { useNotification } from "../../../../contexts/NotificationProvider";
 
 export default function OrderDetail() {
   const { id } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
   const orders = useContext(OrderContext);
   const orderDetail = useContext(OrderDetailContext);
   const products = useContext(ProductsContext);
-  const showNotification = useNotification();
-  const [orderStatus, setOrderStatus] = useState(ORDER_STATUSES[0]);
+
   const [order, setOrder] = useState(location.state || null);
   useEffect(() => {
     const result = getOjectById(orders, id);
-    const a = getOjectById(ORDER_STATUSES, result?.status);
-    setOrderStatus(a);
     setOrder(result);
   }, [orders, id]);
 
   // đổi trạng thái
-  const handleChangeStatus = async (e) => {
-    const nextStatus = e.target.value;
-    const byStatus = getOjectById(ORDER_STATUSES, nextStatus);
-    console.log(byStatus);
-
-    switch (nextStatus) {
-      case "Pending":
-        if (byStatus.level < orderStatus.level) {
-        
-          showNotification("không trở về bước trước", "error");
-        }
-        break;
-      case "Processing":
-        if (byStatus.level < orderStatus.level) {
-         
-          showNotification("không trở về bước trước", "error");
-        }else {
-           setOrder({ ...order, status: nextStatus });
-        }
-        break;
-      case "Shipped":
-        if (byStatus.level < orderStatus.level) {
-         
-          showNotification("không trở về bước trước", "error");
-        }else {
-           setOrder({ ...order, status: nextStatus });
-        }
-        break;
-      case "Delivered":
-        if (byStatus.level < orderStatus.level) {
-         
-          showNotification("không trở về bước trước", "error");
-        }else {
-           setOrder({ ...order, status: nextStatus });
-        }
-        break;
-      case "Cancelled":
-        if (orderStatus.id == "Pending" || orderStatus.id == "Processing") {
-          setOrder({ ...order, status: nextStatus });
-          return;
-        } else {
-          showNotification("không thể hủy", "error");
-        }
-        break;
-      case "Returned":
-        if (orderStatus.id == "Delivered") {
-          setOrder({ ...order, status: nextStatus });
-          return;
-        } else {
-         
-          showNotification("Đã giao mới được trả hàng", "error");
-        }
-        break;
-      case "Refunded":
-         if (orderStatus.id == "Returned") {
-          setOrder({ ...order, status: nextStatus });
-          return;
-        } else {
-          showNotification("Trả hàng mới được hoàn tiền", "error");
-        }
-        break;
-    }
+  const handleChangeStatus = (e) => {
+    setOrder({ ...order, status: e.target.value });
   };
 
-  // Cập nhật trạng thái và chuyển về trang danh sách
-  const updateStatus = async () => {
-    if (!order?.id) return;
-    try {
-      await updateDocument("orders", { ...order, status: order.status });
-      navigate("/admin/orders");
-      showNotification("Đã cập nhật đơn hàng thành công", "info");
-    } catch (err) {
-      console.error("Cập nhật trạng thái đơn hàng thất bại:", err);
-    }
+  // Hàm lấy màu cho icon từ thuộc tính color trong constants
+  const getIconColor = (colorString) => {
+    // Nếu là "red" đơn giản
+    if (colorString === "red") return "#ef4444";
+
+    // Parse từ class Tailwind như "bg-blue-100 text-blue-800"
+    if (colorString.includes("blue")) return "#3b82f6";
+    if (colorString.includes("indigo")) return "#6366f1";
+    if (colorString.includes("green")) return "#10b981";
+    if (colorString.includes("red")) return "#ef4444";
+    if (colorString.includes("pink")) return "#ec4899";
+    if (colorString.includes("amber")) return "#f59e0b";
+
+    return "#ffffff"; // mặc định màu trắng
   };
 
   return (
@@ -237,7 +175,8 @@ export default function OrderDetail() {
               </p>
             </CardContent>
           </Card>
-           <div >
+        </div>
+        <div class="col-start-2">
           {/* Cập nhật trạng thái */}
           <h3
             style={{ marginTop: "30px", fontSize: "20px", fontWeight: "600" }}
@@ -258,6 +197,17 @@ export default function OrderDetail() {
           >
             <CardContent>
               <FormControl fullWidth>
+                <InputLabel
+                  shrink
+                  sx={{
+                    color: "blue",
+                    transform: "translateY(-20px)", // ⭐ đẩy label lên cao
+                   
+                  }}
+                >
+                  Trạng thái mới
+                </InputLabel>
+
                 <Select
                   value={order?.status || ""}
                   label="Trạng thái mới"
@@ -295,36 +245,29 @@ export default function OrderDetail() {
                   {ORDER_STATUSES.map((e) => {
                     return (
                       <MenuItem key={e.id} value={e.id}>
-                        <div className="flex items-center">
-                          <ListItemIcon
-                            sx={{
-                              color: e.color,
-                              minWidth: "40px",
-                            }}
-                          >
-                            {e.icon}
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={e.title}
-                            sx={{ color: "white" }}
-                          />
-                        </div>
+                        <ListItemIcon
+                          sx={{
+                            color: getIconColor(e.color),
+                            minWidth: "40px",
+                          }}
+                        >
+                          {e.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={e.title}
+                          sx={{ color: "white" }}
+                        />
                       </MenuItem>
                     );
                   })}
                 </Select>
               </FormControl>
-              <button
-                onClick={updateStatus}
-                className="w-full p-3 rounded-2xl mt-2 bg-blue-600 text-white font-semibold hover:bg-blue-700 transition cursor-pointer"
-              >
+              <button className="w-full p-3 rounded-2xl mt-2 bg-blue-600">
                 Cập nhật trạng thái
               </button>
             </CardContent>
           </Card>
         </div>
-        </div>
-       
       </div>
     </div>
   );

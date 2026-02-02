@@ -11,11 +11,9 @@ import { OrderContext } from "../../../../contexts/OrderProvider";
 import PaginationTable from "../../../../components/admin/PaginationTable";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { ORDER_STATUSES } from "../../../../untils/Contants";
-import { getOjectById } from "../../../../services/reponsive";
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
     color: "#fff",
     fontWeight: "bold",
   },
@@ -28,8 +26,9 @@ const StyledTableCell = styled(TableCell)(() => ({
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  "&:last-child td, &:last-child th": {
-    border: 0,
+  backgroundColor: "transparent",
+  "&:nth-of-type(odd)": {
+    backgroundColor: "rgba(255,255,255,0.05)",
   },
 }));
 
@@ -37,7 +36,7 @@ function TableOrder({ search = "" }) {
   const navigate = useNavigate();
 
 const handleDetail = (row) => {
-  navigate(`/admin/orders/${row.id}`, { state: row });
+  navigate(`/orders/${row.id}`, { state: row });
 };
   const orders = useContext(OrderContext);
   const [page, setPage] = useState(1);
@@ -51,6 +50,21 @@ const handleDetail = (row) => {
       : orders;
     return filtered;
   }, [orders, search, page]);
+//màu status
+const getStatusColor = (status) => {
+  switch (status) {
+    case "pending":
+      return "#ffa500"; // cam
+    case "shipping":
+      return "#1e90ff"; // xanh dương
+    case "success":
+      return "#4caf50"; // xanh lá
+    case "cancel":
+      return "#ff4d4f"; // đỏ
+    default:
+      return "#ffffff"; // mặc định
+  }
+};
   return (
     <>
       <TableContainer
@@ -62,6 +76,7 @@ const handleDetail = (row) => {
           color: "white",
           mt: 5,
         }}
+        className="text-white"
       >
         <Table>
           <TableHead>
@@ -93,12 +108,10 @@ const handleDetail = (row) => {
                     </StyledTableCell>
                     <StyledTableCell>{row.id}</StyledTableCell>
                     <StyledTableCell>{row.name}</StyledTableCell>
-                    <StyledTableCell>{row.total_amount.toLocaleString()}₫</StyledTableCell>
+                    <StyledTableCell>{row.total_amount}₫</StyledTableCell>
                     <StyledTableCell>{row.address}</StyledTableCell>
                     <StyledTableCell>{row.note}</StyledTableCell>
-                    <StyledTableCell >
-                         <div style={{ color : getOjectById(ORDER_STATUSES,row.status)?.color}}>{row.status}</div>  
-                    </StyledTableCell>
+                    <StyledTableCell>{row.status}</StyledTableCell>
 
                     <StyledTableCell align="center">
                       <Button
