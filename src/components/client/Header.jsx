@@ -119,9 +119,9 @@ function Header({ openCart, setOpenCart }) {
 
         <Link to="/" className="cursor-pointer flex items-center">
           <img
-            src="/src/assets/logo3.png"
+            src="https://tse2.mm.bing.net/th/id/OIP.SopWOzrgXjIrfCiGJXzq2gHaHa"
             alt="OutfitX Logo"
-            className="h-20 object-contain"
+            className="h-15 object-contain"
           />
         </Link>
 

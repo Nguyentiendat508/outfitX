@@ -7,7 +7,7 @@ function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2">
-              <img className="w-25 h-20" src="/src/assets/logo3.png" alt="" />
+              <img className="w-25 h-20" src="https://tse2.mm.bing.net/th/id/OIP.SopWOzrgXjIrfCiGJXzq2gHaHa" alt="" />
               <span className="text-lg bg-gradient-to-r from-[#121FCF] to-[#CF1512] bg-clip-text text-transparent font-semibold">TDSHOP</span>
             </div>
             <p className="mt-3  text-sm text-white">Thời trang tối giản cho mọi ngày.</p>
